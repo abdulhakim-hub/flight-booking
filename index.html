@@ -14,8 +14,8 @@
 </head>
 
 <body>
-    <!--Header and Menu Section-->
-    <header class="container">
+     <!--Header and Menu Section-->
+     <header class="container">
         <nav>
             <ul>
                 <li><a href="#">Home</a></li>
@@ -40,9 +40,9 @@
             </div>
             <div class="inputs">
                 <div class="input-group">
-                    <label" for="">Departure</label>
+                    <label" for="">Departure
                     <input class="inp-style" type="date" name="">
-                </div>
+                </label"></div>
                 <div class="input-group">
                     <label for="">Return</label>
                     <input class="inp-style" type="date" name="">
@@ -50,21 +50,21 @@
             </div>
             <div class="input-group f-class">
                 <div>
-                    <label for="">First Class ($150)</label>
-                    <input class="inp-style inp-width" type="number" name="">
+                    <label id="first-total" for="">First Class ($150)</label>
+                    <input id="first-input" class="inp-style inp-width" type="number" name="" value="0">
                 </div>
                 <div class="plus-minus-btn">
-                    <p>+ -</p>
+                    <p> <button onclick="allbooking('first',true)">+</button> <button onclick="allbooking('first', false)">-</button></p>
                 </div>
             </div>
             
             <div class="input-group f-class">
                 <div>
-                    <label for="">Economy ($100)</label>
-                    <input class="inp-style inp-width" type="number" name="">
+                    <label id="economy-total" for="">Economy ($100)</label>
+                    <input id="economy-input" class="inp-style inp-width" type="number" name="" value="0">
                 </div>
                 <div class="plus-minus-btn">
-                    <p> <span>+</span> <span>-</span> </p>
+                    <p> <button onclick="allbooking('economy',true)">+</button> <button onclick=" allbooking('economy', false)">-</button> </p>
                 </div>
             </div>
             <div class="calculations">
@@ -73,7 +73,7 @@
                         <p>Subtotal</p>
                     </div>
                     <div class="right">
-                        <p>$500</p>
+                        <p id="subtotal">$00</p>
                     </div>
                 </div>
 
@@ -82,7 +82,7 @@
                         <p>Charge 10% VAT</p>
                     </div>
                     <div class="right">
-                        <p>$50</p>
+                        <p id="vat-count">$00</p>
                     </div>
                 </div>
                 <hr>
@@ -91,18 +91,127 @@
                         <h4>Total</h4>
                     </div>
                     <div class="right">
-                        <p>$550</p>
+                        <p id="Total">$00</p>
                     </div>
                 </div>
             </div>
-            <button class="btn-style">Book Now</button>
+            <!-- popup start -->
+            
+
+            <div id="popup" style="opacity: 0; visibility: hidden;">
+              <h2 id="popup__title" style="color: rgb(4, 180, 4);">Booking successful</h2>
+              <p id="popup__info">You booked Total 4 sit  first total sit 0 first total amount  0 economics total sit 4 economics total amount 400 .</p>
+              <button id="close-popup">Close</button>
+            </div>
+            <!-- popup end -->
+            <button onclick="submit()" class="btn-style">Book Now</button>
+            
         </div>
 
         <div class="booking-content">
             <h1>discover <br> around the world</h1>
             <p>Lorem ipsum dolor sit amet consectetur adipisicingelit. Provident voluptatibus quam fuga laborumalias veniam libero autem quasi maxime ullam vero nama imi dolor, architecto ab facilis eaque deserunt nobise voluptatibus quam</p>
         </div>
+    
     </section>
+    <script>
+         /* **************************************************************
+    
+       This function use for value increase and decrease 
+
+      ************************************************************** */
+    
+    function allbooking(booksit, isincrease){
+        const firstInput = document.getElementById(booksit + '-input');
+        const firstCount = parseFloat(firstInput.value);
+        let firstNewCount = firstCount;
+        if(isincrease == true){
+            firstNewCount = firstCount + 1;
+        }
+        if(isincrease == false && firstCount > 0){
+            firstNewCount = firstCount - 1;
+        }
+        firstInput.value = firstNewCount;
+        const firstTotal = firstNewCount * 150;
+        Total_price()
+    }
+
+    /* **************************************************************
+
+       This function use for calculate  subtotal vat and total amount
+
+      ************************************************************** */
+
+    function Total_price(){
+        const firstCount = booksitInput('first');
+        const economyCount = booksitInput('economy');
+        const subTotalPrice = firstCount * 150 + economyCount * 100;
+        document.getElementById('subtotal').innerText = '$' + subTotalPrice;
+        const vatCount = subTotalPrice * .10;
+        document.getElementById('vat-count').innerText = '$' + vatCount;
+        const Total = subTotalPrice - vatCount;
+        document.getElementById('Total').innerText = '$' + Total;
+    }
+
+       /* **************************************************************
+    
+       This function use for get input from input fild
+
+      ************************************************************** */
+     function booksitInput(sitInput){
+         const SitInput = document.getElementById(sitInput + '-input');
+         const SitCount = parseFloat(SitInput.value);
+         return SitCount;
+     }
+
+
+        /* **************************************************************
+    
+       This function use for create submit alert and to do blank 0 in input field
+       and others
+
+      ************************************************************** */
+
+  
+
+    function submit() {
+                const popup = document.getElementById('popup');
+                const popup__title = document.getElementById('popup__title');
+                const popup__info = document.getElementById('popup__info');
+                let firstTotal = booksitInput('first')
+                let economicsTotal = booksitInput('economy')
+                let Total = economicsTotal + firstTotal ;
+                if (document.getElementById('first-input').value == 0 && document.getElementById('economy-input').value == 0) {
+                    popup__title.innerText = 'Booking Unsuccessful!';
+                    popup__title.style.color = 'red';
+                    popup__info.innerText = 'You need to buy at least one ticket.';
+                }
+             else {
+                    popup__title.innerText = 'Booking successful';
+                    popup__title.style.color = '#04B404';
+                    let userfirstTotal = firstTotal * 150 ;
+                    let usereconomicsTotal = economicsTotal * 100;
+                    popup__info.innerText = 'You booked Total ' + Total + ' sit ' + ' first total sit ' + firstTotal   + ' first total amount  ' + userfirstTotal   + ' economics total sit ' + economicsTotal  + ' economics total amount ' + usereconomicsTotal + ' .';
+                    
+                }
+
+                popup.style.opacity = '1';
+                popup.style.visibility = 'visible';
+
+                document.getElementById('first-input').value = 0;
+                document.getElementById('economy-input').value = 0;
+
+                document.getElementById('subtotal').innerText = "$00";
+                document.getElementById('vat-count').innerText = "$00";
+                document.getElementById('Total').innerText = "$00";
+            }
+
+            document.getElementById('close-popup').addEventListener('click', function () {
+                popup.style.opacity = '0';
+                popup.style.visibility = 'hidden';
+            })
+
+</script>
 
     <!--Thank You-->
 </body>
